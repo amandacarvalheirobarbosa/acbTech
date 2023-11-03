@@ -1,0 +1,32 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.nav-item {
+  display: flex;
+  margin: auto;
+  align-items: center;
+  text-decoration: none;
+  padding: 5px;
+  color: black;
+}
+
+.nav-item:hover {
+  color: #ed233d !important;
+  font-weight: 600;
+}
