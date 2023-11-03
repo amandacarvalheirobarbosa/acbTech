@@ -46,8 +46,12 @@ try {
     $("#FormLog").submit();
   }
 
-  function Voltar() {
+  function VoltarAdicionar() {
     $("#ModalAdicionar").modal("hide");
+  }
+
+  function VoltarExcluir() {
+    $("#ModalExcluir").modal("hide");
   }
 
   function Adicionar() {
@@ -203,7 +207,7 @@ try {
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; border-radius:5px 5px 0px 0px;">
           <h6 class="modal-title" style="color: white;">Adicionar Categoria</h6>
-          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
+          <button type="button" class="close" data-dismiss="modal" onclick="VoltarAdicionar();">&times;</button>
         </div>
         <div class="modal-body">
           <form method='POST' id="modalform" enctype="multipart/form-data">
@@ -223,7 +227,8 @@ try {
           </form>
           <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
             <button type="button" class="btn btn-success" onclick="GravarCategoria();">Salvar</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"
+              onclick="VoltarAdicionar();">Cancelar</button>
           </div>
         </div>
       </div>
@@ -235,19 +240,19 @@ try {
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
           <h4 class="modal-title">Atenção</h4>
-          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
+          <button type="button" class="close" data-dismiss="modal" onclick="VoltarExcluir();">&times;</button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="form-group form-group-sm col-sm-12">
               <input name="IdExclude" id="IdExclude" style="display:none" />
-              <h4>Deseja realmente excluir esta categoria?</h4>
+              <h6>Deseja realmente excluir esta categoria?</h6>
             </div>
           </div>
         </div>
         <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
           <button type="button" class="btn btn-success" onclick="ExcluirCategoria();">Excluir</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="VoltarExcluir();">Cancelar</button>
         </div>
       </div>
     </div>

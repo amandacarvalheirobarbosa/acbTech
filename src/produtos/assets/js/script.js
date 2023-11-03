@@ -1,9 +1,27 @@
+$(document).ready(function () {
+  $(".form_datetime").datetimepicker({
+    format: "dd/mm/yyyy hh:ii",
+    language: "pt-BR",
+    weekStart: 1,
+    todayBtn: 1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    forceParse: 0,
+    showMeridian: 1,
+  });
+});
+
 function SubmeterForm() {
   $("#FormLog").submit();
 }
 
-function Voltar() {
+function VoltarAdicionar() {
   $("#ModalAdicionar").modal("hide");
+}
+
+function VoltarExcluir() {
+  $("#ModalExcluir").modal("hide");
 }
 
 function Adicionar() {

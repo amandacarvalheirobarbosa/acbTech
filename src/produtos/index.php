@@ -46,8 +46,12 @@ try {
     $("#FormLog").submit();
   }
 
-  function Voltar() {
+  function VoltarAdicionar() {
     $("#ModalAdicionar").modal("hide");
+  }
+
+  function VoltarExcluir() {
+    $("#ModalExcluir").modal("hide");
   }
 
   function Adicionar() {
@@ -210,7 +214,7 @@ try {
                         <td class="hidden-xs hidden-sm">' . $row["id_produto"] . '</td>
                         <td class="hidden-xs hidden-sm">' . $row["nome_cat"] . '</td>
                         <td class="hidden-xs hidden-sm">' . $row["nome"] . '</td>
-                        <td class="hidden-xs hidden-sm">' . $row["preco"] . '</td>
+                        <td class="hidden-xs hidden-sm">R$ ' . $row["preco"] . '</td>
                         <td class="hidden-xs hidden-sm">' . $row["estoque"] . '</td>
         
                         <td>
@@ -232,7 +236,7 @@ try {
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
           <h6 class="modal-title">Adicionar Produto</h6>
-          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
+          <button type="button" class="close" data-dismiss="modal" onclick="VoltarAdicionar();">&times;</button>
         </div>
         <div class="modal-body">
           <form method='POST' id="modalform" enctype="multipart/form-data">
@@ -269,8 +273,11 @@ try {
             <div class="row">
               <div class="form-group form-group-sm col-sm-6">
                 <label class="control-label">Preço</label>
-                <input class="form-control" id="ePreco" name="ePreco" value="<?php if (isset($row["preco"]))
-                  echo $row["preco"]; ?>" required />
+                <div class="input-group">
+                  <span class="input-group-addon">R$</span>
+                  <input class="form-control" type="decimal" id="ePreco" name="ePreco" maxlength="10" value="<?php if (isset($row["preco"]))
+                    echo $row["preco"]; ?>" required />
+                </div>
               </div>
               <div class="form-group form-group-sm col-sm-6">
                 <label class="control-label">Estoque</label>
@@ -282,7 +289,8 @@ try {
           </form>
           <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
             <button type="button" class="btn btn-success" onclick="GravarProduto();">Salvar</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"
+              onclick="VoltarAdicionar();">Cancelar</button>
           </div>
         </div>
       </div>
@@ -294,19 +302,19 @@ try {
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
           <h4 class="modal-title">Atenção</h4>
-          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
+          <button type="button" class="close" data-dismiss="modal" onclick="VoltarExcluir();">&times;</button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="form-group form-group-sm col-sm-12">
               <input name="IdExclude" id="IdExclude" style="display:none" />
-              <h4>Deseja realmente excluir este produto?</h4>
+              <h6>Deseja realmente excluir este produto?</h6>
             </div>
           </div>
         </div>
         <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
           <button type="button" class="btn btn-success" onclick="ExcluirProduto();">Excluir</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="VoltarExcluir();">Cancelar</button>
         </div>
       </div>
     </div>
