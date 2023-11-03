@@ -12,11 +12,8 @@ function Adicionar() {
   $("#eEstoque").val("");
 }
 
-function EditarProduto(id) {
-  $("#ModalAdicionar").modal("show");
-}
-
 function Editar(id) {
+  $("#ModalAdicionar").modal("show");
   $.ajax({
     type: "POST",
     url: "query.php",

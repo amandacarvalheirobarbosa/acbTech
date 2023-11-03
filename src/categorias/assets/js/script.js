@@ -9,11 +9,9 @@ function Adicionar() {
   $("#eNome").val("");
 }
 
-function EditarCategoria(id) {
-  $("#ModalAdicionar").modal("show");
-}
-
 function Editar(id) {
+  $("#ModalAdicionar").modal("show");
+
   $.ajax({
     type: "POST",
     url: "query.php",
