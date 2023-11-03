@@ -2,6 +2,10 @@ function SubmeterForm() {
   $("#FormLog").submit();
 }
 
+function Voltar() {
+  $("#ModalAdicionar").modal("hide");
+}
+
 function Adicionar() {
   $("#ModalAdicionar").modal("show");
 
@@ -12,16 +16,60 @@ function Adicionar() {
   $("#eEstoque").val("");
 }
 
+function GravarProduto() {
+  var dataU = {
+    Id: $("#eId").val(),
+    IdCategoria: $("#eIdCategoria").val(),
+    Nome: $("#eNome").val(),
+    Preco: $("#ePreco").val(),
+    Estoque: $("#eEstoque").val(),
+  };
+
+  if (!dataU.IdCategoria) {
+    $("#eError").text("É necessário preencher o campo categoria");
+    return;
+  }
+
+  if (!dataU.Nome) {
+    $("#eError").text("É necessário preencher o campo nome");
+    return;
+  }
+
+  if (!dataU.Preco) {
+    $("#eError").text("É necessário preencher o campo preço");
+    return;
+  }
+
+  if (!dataU.Estoque) {
+    $("#eError").text("É necessário preencher o campo estoque");
+    return;
+  }
+
+  $.ajax({
+    url: "../../api/produto/insert.php",
+    method: "POST",
+    data: dataU,
+    success: function (response) {
+      console.log("Resposta do servidor:", response);
+    },
+    error: function (xhr, status, error) {
+      console.error("Erro na requisição:", error);
+    },
+  });
+  return;
+}
+
 function Editar(id) {
   $("#ModalAdicionar").modal("show");
+
   $.ajax({
+    url: "../../api/produto/query.php",
     type: "POST",
-    url: "query.php",
     data: {
-      IdCategoria: id,
+      IdProduto: id,
     },
-    success: function (html) {
-      var ob = JSON.parse(html);
+    success: function (response) {
+      var ob = JSON.parse(response);
       $("#eId").val(ob.id_produto);
       $("#eIdCategoria").val(ob.id_categoria);
       $("#eNome").val(ob.nome);
@@ -45,15 +93,15 @@ function ExcluirProduto() {
   dataU.Id = $("#IdExclude").val();
 
   $.ajax({
+    url: "../../api/produto/delete.php",
     type: "POST",
-    url: "delete.php",
     data: dataU,
-    success: function (html) {
-      if (html.indexOf("sucesso") != -1) {
+    success: function (response) {
+      if (response.indexOf("sucesso") != -1) {
         $("#ModalExcluir").modal("hide");
         $("#FormLog").submit();
       } else {
-        $("#eError").text(html);
+        $("#eError").text(response);
       }
     },
     error: function (xhr, ajaxOptions, thrownError) {

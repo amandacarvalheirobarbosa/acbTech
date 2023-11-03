@@ -1,9 +1,6 @@
 <?php
 
 include_once("../../db/connection.php");
-include_once("../../api/categoria/query.php");
-include_once("../../api/categoria/insert.php");
-include_once("../../api/categoria/delete.php");
 
 try {
   $sql = "SELECT * FROM tab_categoria";
@@ -27,11 +24,30 @@ try {
   <link rel="stylesheet" href="/src/assets/css/style.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 </head>
 
-<script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.form_datetime').datetimepicker({
+      format: 'dd/mm/yyyy hh:ii',
+      language: 'pt-BR',
+      weekStart: 1,
+      todayBtn: 1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 2,
+      forceParse: 0,
+      showMeridian: 1
+    });
+  });
+
   function SubmeterForm() {
     $("#FormLog").submit();
+  }
+
+  function Voltar() {
+    $("#ModalAdicionar").modal("hide");
   }
 
   function Adicionar() {
@@ -41,17 +57,42 @@ try {
     $("#eNome").val("");
   }
 
+  function GravarCategoria() {
+    var dataU = {
+      Id: $("#eId").val(),
+      Nome: $('#eNome').val()
+    };
+
+    if (!dataU.Nome) {
+      $("#eError").text("É necessário preencher o campo nome");
+      return;
+    }
+
+    $.ajax({
+      url: '../../api/categoria/insert.php',
+      method: "POST",
+      data: dataU,
+      success: function (response) {
+        console.log('Resposta do servidor:', response);
+      },
+      error: function (xhr, status, error) {
+        console.error('Erro na requisição:', error);
+      }
+    });
+    return;
+  }
+
   function Editar(id) {
     $("#ModalAdicionar").modal("show");
 
     $.ajax({
+      url: "../../api/categoria/query.php",
       type: "POST",
-      url: "query.php",
       data: {
         IdCategoria: id,
       },
-      success: function (html) {
-        var ob = JSON.parse(html);
+      success: function (response) {
+        var ob = JSON.parse(response);
         $("#eId").val(ob.id_categoria);
         $("#eNome").val(ob.nome);
       },
@@ -72,15 +113,15 @@ try {
     dataU.Id = $("#IdExclude").val();
 
     $.ajax({
+      url: "../../api/categoria/delete.php",
       type: "POST",
-      url: "delete.php",
       data: dataU,
-      success: function (html) {
-        if (html.indexOf("sucesso") != -1) {
+      success: function (response) {
+        if (response.indexOf("sucesso") != -1) {
           $("#ModalExcluir").modal("hide");
           $("#FormLog").submit();
         } else {
-          $("#eError").text(html);
+          $("#eError").text(response);
         }
       },
       error: function (xhr, ajaxOptions, thrownError) {
@@ -128,10 +169,9 @@ try {
         <table class="table">
           <thead>
             <tr>
-              <th class="hidden-md hidden-lg"></th>
               <th class="hidden-xs hidden-sm">Id</th>
               <th class="hidden-xs hidden-sm">Nome</th>
-              <th></th>
+              <th class="hidden-xs hidden-sm"></th>
             </tr>
           </thead>
           <tbody>
@@ -161,9 +201,9 @@ try {
   <div id="ModalAdicionar" class="modal fade" role="dialog">
     <div class="modal-dialog ">
       <div class="modal-content">
-        <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Adicionar Categoria</h4>
+        <div class="modal-header" style="background-color: #ed233d; border-radius:5px 5px 0px 0px;">
+          <h6 class="modal-title" style="color: white;">Adicionar Categoria</h6>
+          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
         </div>
         <div class="modal-body">
           <form method='POST' id="modalform" enctype="multipart/form-data">
@@ -173,17 +213,18 @@ try {
                 <input class="form-control" id="eId" name="eId" value="<?php if (isset($row["id_categoria"]))
                   echo $row["id_categoria"]; ?>" disabled required />
               </div>
-              <div class="form-group form-group-sm col-sm-4">
+              <div class="form-group form-group-sm col-sm-10">
                 <label class="control-label">Nome</label>
                 <input type="text" class="form-control" id="eNome" name="eNome" value="<?php if (isset($row["nome"]))
                   echo $row["nome"]; ?>" required />
               </div>
             </div>
-            <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
-              <button type="button" class="btn btn-success" onclick="AdicionarCategoria();">Salvar</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
+            <div class="row">&nbsp;</div>
           </form>
+          <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
+            <button type="button" class="btn btn-success" onclick="GravarCategoria();">Salvar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -193,8 +234,8 @@ try {
     <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Atenção</h4>
+          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -206,7 +247,7 @@ try {
         </div>
         <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
           <button type="button" class="btn btn-success" onclick="ExcluirCategoria();">Excluir</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
         </div>
       </div>
     </div>

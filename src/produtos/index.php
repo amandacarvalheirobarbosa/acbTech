@@ -1,12 +1,9 @@
 <?php
 
 include_once("../../db/connection.php");
-include_once("../../api/produto/query.php");
-include_once("../../api/produto/insert.php");
-include_once("../../api/produto/delete.php");
 
 try {
-  $sql = "SELECT * FROM tab_produto";
+  $sql = "SELECT prod.*, cat.nome as nome_cat FROM tab_produto prod LEFT JOIN tab_categoria cat ON cat.id_categoria=prod.id_categoria";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -27,11 +24,30 @@ try {
   <link rel="stylesheet" href="/src/assets/css/style.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 </head>
 
-<script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.form_datetime').datetimepicker({
+      format: 'dd/mm/yyyy hh:ii',
+      language: 'pt-BR',
+      weekStart: 1,
+      todayBtn: 1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 2,
+      forceParse: 0,
+      showMeridian: 1
+    });
+  });
+
   function SubmeterForm() {
     $("#FormLog").submit();
+  }
+
+  function Voltar() {
+    $("#ModalAdicionar").modal("hide");
   }
 
   function Adicionar() {
@@ -44,16 +60,60 @@ try {
     $("#eEstoque").val("");
   }
 
+  function GravarProduto() {
+    var dataU = {
+      Id: $("#eId").val(),
+      IdCategoria: $("#eIdCategoria").val(),
+      Nome: $("#eNome").val(),
+      Preco: $("#ePreco").val(),
+      Estoque: $("#eEstoque").val(),
+    };
+
+    if (!dataU.IdCategoria) {
+      $("#eError").text("É necessário preencher o campo categoria");
+      return;
+    }
+
+    if (!dataU.Nome) {
+      $("#eError").text("É necessário preencher o campo nome");
+      return;
+    }
+
+    if (!dataU.Preco) {
+      $("#eError").text("É necessário preencher o campo preço");
+      return;
+    }
+
+    if (!dataU.Estoque) {
+      $("#eError").text("É necessário preencher o campo estoque");
+      return;
+    }
+
+    $.ajax({
+      url: '../../api/produto/insert.php',
+      method: "POST",
+      data: dataU,
+      success: function (response) {
+        console.log('Resposta do servidor:', response);
+      },
+      error: function (xhr, status, error) {
+        console.error('Erro na requisição:', error);
+      }
+    });
+    return;
+  }
+
   function Editar(id) {
     $("#ModalAdicionar").modal("show");
+
     $.ajax({
+      url: "../../api/produto/query.php",
       type: "POST",
-      url: "query.php",
       data: {
-        IdCategoria: id,
+        IdProduto: id,
       },
-      success: function (html) {
-        var ob = JSON.parse(html);
+      success: function (response) {
+        var ob = JSON.parse(response);
         $("#eId").val(ob.id_produto);
         $("#eIdCategoria").val(ob.id_categoria);
         $("#eNome").val(ob.nome);
@@ -77,15 +137,15 @@ try {
     dataU.Id = $("#IdExclude").val();
 
     $.ajax({
+      url: "../../api/produto/delete.php",
       type: "POST",
-      url: "delete.php",
       data: dataU,
-      success: function (html) {
-        if (html.indexOf("sucesso") != -1) {
+      success: function (response) {
+        if (response.indexOf("sucesso") != -1) {
           $("#ModalExcluir").modal("hide");
           $("#FormLog").submit();
         } else {
-          $("#eError").text(html);
+          $("#eError").text(response);
         }
       },
       error: function (xhr, ajaxOptions, thrownError) {
@@ -148,7 +208,7 @@ try {
                 $row = $result->fetch_assoc();
                 echo '<tr>
                         <td class="hidden-xs hidden-sm">' . $row["id_produto"] . '</td>
-                        <td class="hidden-xs hidden-sm">' . $row["id_categoria"] . '</td>
+                        <td class="hidden-xs hidden-sm">' . $row["nome_cat"] . '</td>
                         <td class="hidden-xs hidden-sm">' . $row["nome"] . '</td>
                         <td class="hidden-xs hidden-sm">' . $row["preco"] . '</td>
                         <td class="hidden-xs hidden-sm">' . $row["estoque"] . '</td>
@@ -171,8 +231,8 @@ try {
     <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Adicionar Produto</h4>
+          <h6 class="modal-title">Adicionar Produto</h6>
+          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
         </div>
         <div class="modal-body">
           <form method='POST' id="modalform" enctype="multipart/form-data">
@@ -184,32 +244,46 @@ try {
               </div>
               <div class="form-group form-group-sm col-sm-4">
                 <label class="control-label">Categoria</label>
-                <input class="form-control" id="eIdCategoria" name="eIdCategoria" value="<?php if (isset($row["id_categoria"]))
-                  echo $row["id_categoria"]; ?>" required />
+                <select class="form-control" id="eIdCategoria" name="eIdCategoria">
+                  <?php
+                  $sqlcat = "SELECT id_categoria, nome FROM tab_categoria WHERE delete_date IS NULL";
+                  $stmtcat = $conn->prepare($sqlcat);
+                  $stmtcat->execute();
+                  $resultcat = $stmtcat->get_result();
+                  if ($resultcat->num_rows > 0) {
+                    while ($rowcat = $resultcat->fetch_assoc()) {
+                      echo "<option value='" . $rowcat["id_categoria"] . "' " . ($row["id_categoria"] == $rowcat["id_categoria"] ? 'selected' : '') . ">" . $rowcat["nome"] . "</option>";
+                    }
+                  }
+                  ?>
+                </select>
+                <!-- <input class="form-control" id="eIdCategoria" name="eIdCategoria" value="<?php if (isset($row["id_categoria"]))
+                  echo $row["id_categoria"]; ?>" required /> -->
               </div>
-              <div class="form-group form-group-sm col-sm-4">
+              <div class="form-group form-group-sm col-sm-6">
                 <label class="control-label">Nome</label>
                 <input type="text" class="form-control" id="eNome" name="eNome" value="<?php if (isset($row["nome"]))
                   echo $row["nome"]; ?>" required />
               </div>
             </div>
             <div class="row">
-              <div class="form-group form-group-sm col-sm-4">
+              <div class="form-group form-group-sm col-sm-6">
                 <label class="control-label">Preço</label>
                 <input class="form-control" id="ePreco" name="ePreco" value="<?php if (isset($row["preco"]))
                   echo $row["preco"]; ?>" required />
               </div>
-              <div class="form-group form-group-sm col-sm-4">
+              <div class="form-group form-group-sm col-sm-6">
                 <label class="control-label">Estoque</label>
                 <input type="number" class="form-control" id="eEstoque" name="eEstoque" value="<?php if (isset($row["estoque"]))
                   echo $row["estoque"]; ?>" required />
               </div>
             </div>
-            <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
-              <button type="button" class="btn btn-success" onclick="AdicionarProduto();">Salvar</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
+            <div class="row">&nbsp;</div>
           </form>
+          <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
+            <button type="button" class="btn btn-success" onclick="GravarProduto();">Salvar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -219,8 +293,8 @@ try {
     <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Atenção</h4>
+          <button type="button" class="close" data-dismiss="modal" onclick="Voltar();">&times;</button>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -232,7 +306,7 @@ try {
         </div>
         <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
           <button type="button" class="btn btn-success" onclick="ExcluirProduto();">Excluir</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Voltar();">Cancelar</button>
         </div>
       </div>
     </div>

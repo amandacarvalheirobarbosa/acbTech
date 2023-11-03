@@ -2,6 +2,10 @@ function SubmeterForm() {
   $("#FormLog").submit();
 }
 
+function Voltar() {
+  $("#ModalAdicionar").modal("hide");
+}
+
 function Adicionar() {
   $("#ModalAdicionar").modal("show");
 
@@ -9,17 +13,42 @@ function Adicionar() {
   $("#eNome").val("");
 }
 
+function GravarCategoria() {
+  var dataU = {
+    Id: $("#eId").val(),
+    Nome: $("#eNome").val(),
+  };
+
+  if (!dataU.Nome) {
+    $("#eError").text("É necessário preencher o campo nome");
+    return;
+  }
+
+  $.ajax({
+    url: "../../api/categoria/insert.php",
+    method: "POST",
+    data: dataU,
+    success: function (response) {
+      console.log("Resposta do servidor:", response);
+    },
+    error: function (xhr, status, error) {
+      console.error("Erro na requisição:", error);
+    },
+  });
+  return;
+}
+
 function Editar(id) {
   $("#ModalAdicionar").modal("show");
 
   $.ajax({
+    url: "../../api/categoria/query.php",
     type: "POST",
-    url: "query.php",
     data: {
       IdCategoria: id,
     },
-    success: function (html) {
-      var ob = JSON.parse(html);
+    success: function (response) {
+      var ob = JSON.parse(response);
       $("#eId").val(ob.id_categoria);
       $("#eNome").val(ob.nome);
     },
@@ -40,15 +69,15 @@ function ExcluirCategoria() {
   dataU.Id = $("#IdExclude").val();
 
   $.ajax({
+    url: "../../api/categoria/delete.php",
     type: "POST",
-    url: "delete.php",
     data: dataU,
-    success: function (html) {
-      if (html.indexOf("sucesso") != -1) {
+    success: function (response) {
+      if (response.indexOf("sucesso") != -1) {
         $("#ModalExcluir").modal("hide");
         $("#FormLog").submit();
       } else {
-        $("#eError").text(html);
+        $("#eError").text(response);
       }
     },
     error: function (xhr, ajaxOptions, thrownError) {
