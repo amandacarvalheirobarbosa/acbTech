@@ -1,2 +1,3 @@
 ./db/connection.php
-db/connection.php
+
+debug.log
