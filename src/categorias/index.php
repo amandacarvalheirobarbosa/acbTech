@@ -121,7 +121,7 @@ try {
     <main role="main" class="pb-3">
       <div class="row">
         <div class="col-4">
-          <a class="btn" onclick="AdicionarCategoria();" style="background-color: #ed233d !important; color: white;"><i
+          <a class="btn" onclick="Adicionar();" style="background-color: #ed233d !important; color: white;"><i
               class="fas fa-plus"></i>
             Adicionar</a>
         </div>
