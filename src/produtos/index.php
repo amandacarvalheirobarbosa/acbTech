@@ -111,7 +111,8 @@ try {
             <div class="row">
               <div class="form-group form-group-sm col-sm-2">
                 <label class="control-label">Id</label>
-                <input class="form-control" id="eId" name="eId" disabled required />
+                <input class="form-control" id="eId" name="eId" value="<?php if (isset($row["id_produto"]))
+                  echo $row["id_produto"]; ?>" disabled required />
               </div>
               <div class="form-group form-group-sm col-sm-4">
                 <label class="control-label">Categoria</label>
