@@ -1,4 +1,4 @@
-$(document).ready(function () {
+/* $(document).ready(function () {
   $(".form_datetime").datetimepicker({
     format: "dd/mm/yyyy hh:ii",
     language: "pt-BR",
@@ -10,7 +10,7 @@ $(document).ready(function () {
     forceParse: 0,
     showMeridian: 1,
   });
-});
+}); */
 
 function SubmeterForm() {
   $("#FormLog").submit();

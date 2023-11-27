@@ -27,7 +27,7 @@ try {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 </head>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   $(document).ready(function () {
     $('.form_datetime').datetimepicker({
       format: 'dd/mm/yyyy hh:ii',
@@ -158,7 +158,7 @@ try {
     });
     return;
   }
-</script>
+</script> -->
 
 <body>
   <header>
