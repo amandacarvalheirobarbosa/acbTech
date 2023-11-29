@@ -6,8 +6,9 @@ try {
   if (isset($_POST["Id"])) {
     $Id = mysqli_real_escape_string($conn, $_POST["Id"]);
 
-    $sql = "SELECT * FROM tab_categoria WHERE id_categoria='" . $Id . "'";
+    $sql = "SELECT * FROM tab_categoria WHERE id_categoria=?";
     $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $Id);
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();

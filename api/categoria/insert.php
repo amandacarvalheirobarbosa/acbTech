@@ -24,7 +24,7 @@ try {
       $row = $result->fetch_assoc();
 
       $stmt = $conn->prepare("UPDATE tab_categoria SET nome=?,modified=NOW() WHERE id_categoria=?");
-      $stmt->bind_param('s', $Nome, $Id);
+      $stmt->bind_param('si', $Nome, $Id);
 
       if (!$stmt->execute()) {
         echo '[' . $stmt->errno . "] " . $stmt->error;
