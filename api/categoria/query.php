@@ -2,12 +2,12 @@
 include_once("../../db/connection.php");
 
 try {
-  if (isset($_POST["Id"])) {
-    $Id = mysqli_real_escape_string($conn, $_POST["Id"]);
+  if (isset($_POST["IdCategoria"])) {
+    $IdCategoria = mysqli_real_escape_string($conn, $_POST["IdCategoria"]);
 
     $sql = "SELECT * FROM tab_categoria WHERE id_categoria=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $Id);
+    $stmt->bind_param("i", $IdCategoria);
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();

@@ -73,15 +73,10 @@ function Editar(id) {
     data: {
       IdCategoria: id,
     },
-    dataType: "json",
     success: function (response) {
       var ob = JSON.parse(response);
       $("#eId").val(ob.id_categoria);
       $("#eNome").val(ob.nome);
-      location.reload();
-
-      $("#ModalEdit").modal("hide");
-      $("#FormLog").submit();
     },
     error: function (xhr, ajaxOptions, thrownError) {
       alert(thrownError);

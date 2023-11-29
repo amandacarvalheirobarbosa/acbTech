@@ -3,12 +3,12 @@ include_once("../../db/connection.php");
 
 try {
 
-  if (isset($_POST["Id"])) {
-    $Id = mysqli_real_escape_string($conn, $_POST["Id"]);
+  if (isset($_POST["IdProduto"])) {
+    $IdProduto = mysqli_real_escape_string($conn, $_POST["IdProduto"]);
 
     $sql = "SELECT * FROM tab_produto WHERE id_produto=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $Id);
+    $stmt->bind_param("i", $IdProduto);
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();

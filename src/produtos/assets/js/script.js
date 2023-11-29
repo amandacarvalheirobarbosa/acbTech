@@ -96,19 +96,11 @@ function Editar(id) {
     },
     success: function (response) {
       var ob = JSON.parse(response);
-      if (response.indexOf("sucesso") != -1) {
-        $("#eId").val(ob.id_produto);
-        $("#eIdCategoria").val(ob.id_categoria);
-        $("#eNome").val(ob.nome);
-        $("#ePreco").val(ob.preco);
-        $("#eEstoque").val(ob.estoque);
-        location.reload();
-
-        $("#ModalEdit").modal("hide");
-        $("#FormLog").submit();
-      } else {
-        $("#eError").text(response);
-      }
+      $("#eId").val(ob.id_produto);
+      $("#eIdCategoria").val(ob.id_categoria);
+      $("#eNome").val(ob.nome);
+      $("#ePreco").val(ob.preco);
+      $("#eEstoque").val(ob.estoque);
     },
     error: function (xhr, ajaxOptions, thrownError) {
       alert(thrownError);
