@@ -1,9 +1,0 @@
-{
-  "functions": {
-    "api/categoria/*.php": { "runtime": "vercel-php@0.4.0" },
-    "api/produto/*.php": { "runtime": "vercel-php@0.4.0" },
-    "src/*.php": { "runtime": "vercel-php@0.4.0" },
-    "src/categoria/*.php": { "runtime": "vercel-php@0.4.0" },
-    "src/produto/*.php": { "runtime": "vercel-php@0.4.0" }
-  }
-}
