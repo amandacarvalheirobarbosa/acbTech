@@ -274,11 +274,12 @@ try {
             </div>
             <div class="row">
               <div class="form-group form-group-sm col-sm-6">
-                <label class="control-label">Preço</label>
+                <label class="control-label">Preço (R$)</label>
                 <div class="input-group">
-                  <span class="input-group-addon">R$</span>
-                  <input class="form-control" type="decimal" id="ePreco" name="ePreco" maxlength="10" value="<?php if (isset($row["preco"]))
-                    echo $row["preco"]; ?>" required />
+                  <!-- <span class="input-group-addon">R$</span> -->
+                  <input class="form-control" type="text" id="ePreco" name="ePreco" maxlength="10"
+                    onkeyup="updateMoneyField(this)" value="<?php if (isset($row["preco"]))
+                      echo $row["preco"]; ?>" required />
                 </div>
               </div>
               <div class="form-group form-group-sm col-sm-6">
