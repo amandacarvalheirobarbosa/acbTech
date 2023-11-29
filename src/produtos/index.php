@@ -3,7 +3,7 @@
 include_once("../../db/connection.php");
 
 try {
-  $sql = "SELECT prod.*, cat.nome as nome_cat FROM tab_produto prod LEFT JOIN tab_categoria cat ON cat.id_categoria=prod.id_categoria";
+  $sql = "SELECT prod.*, cat.nome as nome_cat FROM tab_produto prod LEFT JOIN tab_categoria cat ON cat.id_categoria=prod.id_categoria WHERE prod.delete_date IS NULL";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -21,6 +21,8 @@ try {
   <title>Produtos</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Amanda Carvalheiro Barbosa">
+  <link rel="icon" href="../assets/images/logo.png">
   <link rel="stylesheet" href="/src/assets/css/style.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />

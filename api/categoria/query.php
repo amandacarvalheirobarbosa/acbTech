@@ -2,7 +2,6 @@
 include_once("../../db/connection.php");
 
 try {
-
   if (isset($_POST["Id"])) {
     $Id = mysqli_real_escape_string($conn, $_POST["Id"]);
 

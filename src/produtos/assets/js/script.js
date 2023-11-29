@@ -1,4 +1,4 @@
-$(document).ready(function () {
+/* $(document).ready(function () {
   $(".form_datetime").datetimepicker({
     format: "dd/mm/yyyy hh:ii",
     language: "pt-BR",
@@ -11,7 +11,7 @@ $(document).ready(function () {
     showMeridian: 1,
   });
 });
-
+ */
 function SubmeterForm() {
   $("#FormLog").submit();
 }
@@ -68,7 +68,15 @@ function GravarProduto() {
     method: "POST",
     data: dataU,
     success: function (response) {
-      console.log("Resposta do servidor:", response);
+      if (response.indexOf("sucesso") != -1) {
+        console.log("Resposta do servidor:", response);
+        location.reload();
+
+        $("#ModalEdit").modal("hide");
+        $("#FormLog").submit();
+      } else {
+        $("#eError").text(response);
+      }
     },
     error: function (xhr, status, error) {
       console.error("Erro na requisição:", error);
@@ -88,11 +96,19 @@ function Editar(id) {
     },
     success: function (response) {
       var ob = JSON.parse(response);
-      $("#eId").val(ob.id_produto);
-      $("#eIdCategoria").val(ob.id_categoria);
-      $("#eNome").val(ob.nome);
-      $("#ePreco").val(ob.preco);
-      $("#eEstoque").val(ob.estoque);
+      if (response.indexOf("sucesso") != -1) {
+        $("#eId").val(ob.id_produto);
+        $("#eIdCategoria").val(ob.id_categoria);
+        $("#eNome").val(ob.nome);
+        $("#ePreco").val(ob.preco);
+        $("#eEstoque").val(ob.estoque);
+        location.reload();
+
+        $("#ModalEdit").modal("hide");
+        $("#FormLog").submit();
+      } else {
+        $("#eError").text(response);
+      }
     },
     error: function (xhr, ajaxOptions, thrownError) {
       alert(thrownError);
@@ -116,6 +132,8 @@ function ExcluirProduto() {
     data: dataU,
     success: function (response) {
       if (response.indexOf("sucesso") != -1) {
+        location.reload();
+
         $("#ModalExcluir").modal("hide");
         $("#FormLog").submit();
       } else {

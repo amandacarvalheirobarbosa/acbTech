@@ -47,7 +47,15 @@ function GravarCategoria() {
     method: "POST",
     data: dataU,
     success: function (response) {
-      console.log("Resposta do servidor:", response);
+      if (response.indexOf("sucesso") != -1) {
+        console.log("Resposta do servidor:", response);
+        location.reload();
+
+        $("#ModalEdit").modal("hide");
+        $("#FormLog").submit();
+      } else {
+        $("#eError").text(response);
+      }
     },
     error: function (xhr, status, error) {
       console.error("Erro na requisição:", error);
@@ -65,10 +73,15 @@ function Editar(id) {
     data: {
       IdCategoria: id,
     },
+    dataType: "json",
     success: function (response) {
       var ob = JSON.parse(response);
       $("#eId").val(ob.id_categoria);
       $("#eNome").val(ob.nome);
+      location.reload();
+
+      $("#ModalEdit").modal("hide");
+      $("#FormLog").submit();
     },
     error: function (xhr, ajaxOptions, thrownError) {
       alert(thrownError);
@@ -92,6 +105,8 @@ function ExcluirCategoria() {
     data: dataU,
     success: function (response) {
       if (response.indexOf("sucesso") != -1) {
+        location.reload();
+
         $("#ModalExcluir").modal("hide");
         $("#FormLog").submit();
       } else {
