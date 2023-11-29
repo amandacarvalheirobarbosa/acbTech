@@ -200,7 +200,7 @@ try {
           <thead>
             <tr>
               <th>Id</th>
-              <th>IdCategoria</th>
+              <th>Categoria</th>
               <th>Nome</th>
               <th>Preço</th>
               <th>Estoque</th>
