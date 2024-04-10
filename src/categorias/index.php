@@ -64,8 +64,8 @@ try {
   <div class="container">
     <main role="main" class="pb-3">
 
-      <div class="row">
-        <div class="col-12">
+      <div class="col-12">
+        <div class="row">
           <div class="card border mb-3">
             <div class="card-header" style="background-color: #ed233d; color: white; border-radius: 5px 5px 0 0;">
               <h5 class="mb-0">Filtrar Categoria</h5>

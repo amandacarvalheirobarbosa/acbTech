@@ -11,12 +11,7 @@ function aplicarFiltro() {
   document.getElementById("filtroForm").submit();
 }
 
-function salvarSelecao(valor) {
-  localStorage.setItem("selecaoCategoria", valor);
-}
-
 function LimparPesquisa() {
-  localStorage.removeItem("selecaoCategoria");
   localStorage.removeItem("pesquisa_categoria");
   localStorage.removeItem("pesquisa_nome");
 
