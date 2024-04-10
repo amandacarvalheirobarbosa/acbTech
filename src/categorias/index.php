@@ -5,7 +5,8 @@ include_once ("../../db/connection.php");
 $TitlePage = "Categorias";
 
 try {
-  $sql = "SELECT * FROM tab_categoria where deleted IS NULL";
+  $sql = "SELECT * FROM tab_categoria
+          WHERE deleted IS NULL";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $result = $stmt->get_result();
