@@ -87,10 +87,13 @@ try {
                         <td class="hidden-xs hidden-sm">R$ ' . $row["preco"] . '</td>
                         <td class="hidden-xs hidden-sm">' . $row["estoque"] . '</td>
         
-                        <td>
-                          <a class="btn btn-primary" title="Editar" onclick="Editar(' . $row["id_produto"] . ')"><i class="fas fa-edit"></i></a>
-                          <a class="btn btn-danger" title="Excluir" onclick="Excluir(' . $row["id_produto"] . ')"><i class="fas fa-trash-alt"></i></a>
+                        <td style="text-align: right;">
+                            <div style="display: flex; justify-content: flex-end;">
+                                <a class="btn btn-primary" title="Editar" onclick="Editar(' . $row["id_produto"] . ')"><i class="fas fa-edit"></i></a>
+                                <a class="btn btn-danger" title="Excluir" onclick="Excluir(' . $row["id_produto"] . ')"><i class="fas fa-trash-alt"></i></a>
+                            </div>
                         </td>
+
                       </tr>';
               }
             }
