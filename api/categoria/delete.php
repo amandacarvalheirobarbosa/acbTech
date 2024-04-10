@@ -15,13 +15,13 @@ try {
       echo "Categoria não encontrado para excluir";
       return;
     } else {
-      $stmt = $conn->prepare("UPDATE `tab_categoria` SET delete_date=NOW() WHERE id_categoria=?");
+      $stmt = $conn->prepare("UPDATE `tab_categoria` SET deleted=NOW() WHERE id_categoria=?");
       $stmt->bind_param('i', $Id);
 
       if (!$stmt->execute()) {
         echo '[' . $stmt->errno . "] " . $stmt->error;
       } else {
-        $stmt = $conn->prepare("UPDATE `tab_categoria` SET delete_date=NOW() WHERE id_categoria=?");
+        $stmt = $conn->prepare("UPDATE `tab_categoria` SET deleted=NOW() WHERE id_categoria=?");
         $stmt->bind_param('i', $Id);
         echo "Registro excluido com sucesso!";
       }

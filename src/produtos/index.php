@@ -3,7 +3,7 @@
 include_once("../../db/connection.php");
 
 try {
-  $sql = "SELECT prod.*, cat.nome as nome_cat FROM tab_produto prod LEFT JOIN tab_categoria cat ON cat.id_categoria=prod.id_categoria WHERE prod.delete_date IS NULL";
+  $sql = "SELECT prod.*, cat.nome as nome_cat FROM tab_produto prod LEFT JOIN tab_categoria cat ON cat.id_categoria=prod.id_categoria WHERE prod.deleted IS NULL";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -116,7 +116,7 @@ try {
                 <label class="control-label">Categoria</label>
                 <select class="form-control" id="eIdCategoria" name="eIdCategoria">
                   <?php
-                  $sqlcat = "SELECT id_categoria, nome FROM tab_categoria WHERE delete_date IS NULL";
+                  $sqlcat = "SELECT id_categoria, nome FROM tab_categoria WHERE deleted IS NULL";
                   $stmtcat = $conn->prepare($sqlcat);
                   $stmtcat->execute();
                   $resultcat = $stmtcat->get_result();
