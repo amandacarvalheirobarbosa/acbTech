@@ -50,7 +50,7 @@ function GravarProduto() {
   }
 
   $.ajax({
-    url: "../../api/produto/insert.php",
+    url: "insert.php",
     method: "POST",
     data: dataU,
     success: function (response) {
@@ -75,7 +75,7 @@ function Editar(id) {
   $("#ModalAdicionar").modal("show");
 
   $.ajax({
-    url: "../../api/produto/query.php",
+    url: "query.php",
     type: "POST",
     data: {
       IdProduto: id,
@@ -105,7 +105,7 @@ function ExcluirProduto() {
   dataU.Id = $("#IdExclude").val();
 
   $.ajax({
-    url: "../../api/produto/delete.php",
+    url: "delete.php",
     type: "POST",
     data: dataU,
     success: function (response) {
@@ -127,8 +127,8 @@ function ExcluirProduto() {
 
 function formatMoney(money) {
   var formattedMoney = money.toString().replace(/\D/g, "");
-  formattedMoney = formattedMoney.replace(/(\d{2})$/, ",$1");
-  formattedMoney = formattedMoney.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  formattedMoney = formattedMoney.replace(/(\d{2})$/, ".$1");
+  formattedMoney = formattedMoney.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1");
   return formattedMoney;
 }
 

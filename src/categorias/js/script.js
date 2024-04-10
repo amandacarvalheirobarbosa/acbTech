@@ -43,7 +43,8 @@ function GravarCategoria() {
   }
 
   $.ajax({
-    url: "../../api/categoria/insert.php",
+    // url: "../../api/categoria/insert.php",
+    url: "insert.php",
     method: "POST",
     data: dataU,
     success: function (response) {
@@ -68,7 +69,8 @@ function Editar(id) {
   $("#ModalAdicionar").modal("show");
 
   $.ajax({
-    url: "../../api/categoria/query.php",
+    // url: "../../api/categoria/query.php",
+    url: "query.php",
     type: "POST",
     data: {
       IdCategoria: id,
@@ -95,7 +97,8 @@ function ExcluirCategoria() {
   dataU.Id = $("#IdExclude").val();
 
   $.ajax({
-    url: "../../api/categoria/delete.php",
+    // url: "../../api/categoria/delete.php",
+    url: "delete.php",
     type: "POST",
     data: dataU,
     success: function (response) {

@@ -1,6 +1,8 @@
 <?php
 
-include_once("../../db/connection.php");
+include_once ("../../db/connection.php");
+
+$TitlePage = "Categorias";
 
 try {
   $sql = "SELECT * FROM tab_categoria where deleted IS NULL";
@@ -17,7 +19,7 @@ try {
 <html lang="pt-BR">
 
 <head>
-  <title>Categorias</title>
+  <title><?= $TitlePage ?></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Amanda Carvalheiro Barbosa">
@@ -46,26 +48,7 @@ try {
 
 <body>
   <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-      <div class="container-fluid">
-        <a class="navbar-brand" href=".."><img src="../assets/images/logo.png" alt="logo" width="100px"
-            height="100%" /></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-          <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="../categorias/index.php">Categoria</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="../produtos/index.php">Produto</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <?php include_once ('../components/navBar.php') ?>
   </header>
 
   <div class="container">
@@ -111,73 +94,66 @@ try {
   </div>
 
   <div id="ModalAdicionar" class="modal fade" role="dialog">
-    <div class="modal-dialog ">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header" style="background-color: #ed233d; border-radius:5px 5px 0px 0px;">
-          <h6 class="modal-title" style="color: white;">Adicionar Categoria</h6>
-          <button type="button" class="close" data-dismiss="modal" onclick="VoltarAdicionar();">&times;</button>
+        <div class="modal-header" style="background-color: #ed233d; color: white; border-radius: 5px 5px 0 0;">
+          <h5 class="modal-title">Adicionar Categoria</h5>
+          <button type="button" class="btn-close" onclick="VoltarAdicionar();" data-dismiss="modal"
+            aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method='POST' id="modalform" enctype="multipart/form-data">
-            <div class="row">
-              <div class="form-group form-group-sm col-sm-2">
-                <label class="control-label">Id</label>
-                <input class="form-control" id="eId" name="eId" value="<?php if (isset($row["id_categoria"]))
-                  echo $row["id_categoria"]; ?>" disabled required />
-              </div>
-              <div class="form-group form-group-sm col-sm-10">
-                <label class="control-label">Nome</label>
-                <input type="text" class="form-control" id="eNome" name="eNome" value="<?php if (isset($row["nome"]))
-                  echo $row["nome"]; ?>" required />
-              </div>
+          <form method="POST" id="modalform" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="eId" class="form-label">ID</label>
+              <input class="form-control" id="eId" name="eId" value="<?php if (isset($row["id_categoria"]))
+                echo $row["id_categoria"]; ?>" disabled required>
             </div>
-            <div class="row">&nbsp;</div>
+            <div class="mb-3">
+              <label for="eNome" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="eNome" name="eNome" value="<?php if (isset($row["nome"]))
+                echo $row["nome"]; ?>" required>
+            </div>
           </form>
-          <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
-            <button type="button" class="btn btn-success" onclick="GravarCategoria();">Salvar</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"
-              onclick="VoltarAdicionar();">Cancelar</button>
-          </div>
+        </div>
+        <div class="modal-footer" style="background-color: #ed233d; border-radius: 0 0 5px 5px;">
+          <button type="button" class="btn btn-success" onclick="GravarCategoria();">Salvar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal"
+            onclick="VoltarAdicionar();">Cancelar</button>
         </div>
       </div>
     </div>
   </div>
 
   <div id="ModalExcluir" class="modal fade" role="dialog">
-    <div class="modal-dialog ">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header" style="background-color: #ed233d; color:white; border-radius:5px 5px 0px 0px;">
-          <h4 class="modal-title">Atenção</h4>
-          <button type="button" class="close" data-dismiss="modal" onclick="VoltarExcluir();">&times;</button>
+        <div class="modal-header" style="background-color: #ed233d; color: white; border-radius: 5px 5px 0 0;">
+          <h5 class="modal-title">Atenção</h5>
+          <button type="button" class="btn-close" onclick="VoltarExcluir();" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="form-group form-group-sm col-sm-12">
-              <input name="IdExclude" id="IdExclude" style="display:none" />
+            <div class="form-group col-sm-12">
+              <input type="hidden" name="IdExclude" id="IdExclude">
               <h6>Deseja realmente excluir esta categoria?</h6>
             </div>
           </div>
         </div>
-        <div class="modal-footer" style="background-color: #ed233d; border-radius:0px 0px 5px 5px;">
+        <div class="modal-footer" style="background-color: #ed233d; border-radius: 0 0 5px 5px;">
           <button type="button" class="btn btn-success" onclick="ExcluirCategoria();">Excluir</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="VoltarExcluir();">Cancelar</button>
+          <button type="button" class="btn btn-danger" onclick="VoltarExcluir();" data-dismiss="modal">Cancelar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <footer class="container-fluid text-center border-top footer text-muted"
-    style="position: fixed; bottom: 0px !important; width: 100%; height: 30px;">
-    <div class="container">
-      &copy; 2023 - Amanda Carvalheiro Barbosa
-    </div>
-  </footer>
+  <?php include_once ('../components/footer.php') ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="assets/js/script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 
 </html>

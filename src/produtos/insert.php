@@ -1,4 +1,5 @@
 <?php
+
 include_once("../../db/connection.php");
 
 try {
@@ -19,12 +20,6 @@ try {
         echo "Registro gravado com sucesso!";
       }
     } else {
-      $sql = "SELECT * FROM tab_produto WHERE id_produto='" . $Id . "'";
-      $stmt = $conn->prepare($sql);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $row = $result->fetch_assoc();
-
       $stmt = $conn->prepare("UPDATE tab_produto SET id_categoria=?, nome=?, preco=?, estoque=?, modified=NOW() WHERE id_produto=?");
       $stmt->bind_param('issii', $IdCategoria, $Nome, $Preco, $Estoque, $Id);
 
@@ -36,7 +31,7 @@ try {
     }
   }
 
-  // $stmt->close();
+  $stmt->close();
 
 } catch (Exception $e) {
   $erro = $e->getMessage();

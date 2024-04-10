@@ -1,4 +1,5 @@
 <?php
+
 include_once("../../db/connection.php");
 
 try {
@@ -8,7 +9,6 @@ try {
 
     if ($Id == 0) {
       $stmt = $conn->prepare("INSERT INTO tab_categoria (nome, created, modified) VALUES (?,NOW(),NOW())");
-
       $stmt->bind_param('s', $Nome);
 
       if (!$stmt->execute()) {
@@ -17,24 +17,18 @@ try {
         echo "Registro gravado com sucesso!";
       }
     } else {
-      $sql = "SELECT * FROM tab_categoria WHERE id_categoria='" . $Id . "'";
-      $stmt = $conn->prepare($sql);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $row = $result->fetch_assoc();
-
       $stmt = $conn->prepare("UPDATE tab_categoria SET nome=?,modified=NOW() WHERE id_categoria=?");
       $stmt->bind_param('si', $Nome, $Id);
 
       if (!$stmt->execute()) {
         echo '[' . $stmt->errno . "] " . $stmt->error;
       } else {
-        echo "Registro gravado com sucesso!";
+        echo "Registro atualizado com sucesso!";
       }
     }
   }
 
-  // $stmt->close();
+  $stmt->close();
 
 } catch (Exception $e) {
   $erro = $e->getMessage();
