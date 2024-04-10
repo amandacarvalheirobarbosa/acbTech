@@ -2,6 +2,31 @@ function SubmeterForm() {
   $("#FormLog").submit();
 }
 
+function aplicarFiltro() {
+  var categoria = document.getElementById('categoria').value;
+  var nome = document.getElementById("nome").value;
+
+  localStorage.setItem("pesquisa_categoria", categoria);
+  localStorage.setItem("pesquisa_nome", nome);
+  document.getElementById("filtroForm").submit();
+}
+
+function salvarSelecao(valor) {
+  localStorage.setItem("selecaoCategoria", valor);
+}
+
+function LimparPesquisa() {
+  localStorage.removeItem("selecaoCategoria");
+  localStorage.removeItem("pesquisa_categoria");
+  localStorage.removeItem("pesquisa_nome");
+
+  document.getElementById("categoria").value = "";
+  document.getElementById("nome").value = "";
+  
+  document.getElementById("filtroForm").submit();
+}
+
+
 function VoltarAdicionar() {
   $("#ModalAdicionar").modal("hide");
 }

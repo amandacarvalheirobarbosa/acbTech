@@ -5,8 +5,17 @@ include_once ("../../db/connection.php");
 $TitlePage = "Categorias";
 
 try {
+  $nome = isset($_POST["nome"]) ? mysqli_real_escape_string($conn, $_POST["nome"]) : "";
+
   $sql = "SELECT * FROM tab_categoria
           WHERE deleted IS NULL";
+
+  if ($nome != null && $nome != "") {
+    $sql .= " AND nome LIKE '%" . $nome . "%' ";
+  }
+
+  $sql .= " ORDER BY id_categoria ASC";
+
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -31,7 +40,7 @@ try {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 </head>
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
   $(document).ready(function () {
     $('.form_datetime').datetimepicker({
       format: 'dd/mm/yyyy hh:ii',
@@ -45,7 +54,7 @@ try {
       showMeridian: 1
     });
   });
-</script> -->
+</script>
 
 <body>
   <header>
@@ -54,6 +63,27 @@ try {
 
   <div class="container">
     <main role="main" class="pb-3">
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card border mb-3">
+            <div class="card-header" style="background-color: #ed233d; color: white; border-radius: 5px 5px 0 0;">
+              <h5 class="mb-0">Filtrar Categoria</h5>
+            </div>
+            <div class="card-body">
+              <form id="filtroForm" method="POST">
+                <div class="mb-3">
+                  <label for="nome" class="form-label">Nome Categoria:</label>
+                  <input type="text" class="form-control" id="nome" name="nome">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="aplicarFiltro()">Aplicar Filtro</button>
+                <button class="btn btn-danger text-right" onclick="LimparPesquisa();">Limpar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-4">
           <a class="btn" onclick="Adicionar();" style="background-color: #ed233d !important; color: white;"><i
@@ -61,6 +91,7 @@ try {
             Adicionar</a>
         </div>
       </div>
+
       <div class="row">
         <table class="table">
           <thead>
@@ -93,6 +124,7 @@ try {
           </tbody>
         </table>
       </div>
+
     </main>
   </div>
 
@@ -132,7 +164,8 @@ try {
       <div class="modal-content">
         <div class="modal-header" style="background-color: #ed233d; color: white; border-radius: 5px 5px 0 0;">
           <h5 class="modal-title">Atenção</h5>
-          <button type="button" class="btn-close" onclick="VoltarExcluir();" data-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" onclick="VoltarExcluir();" data-dismiss="modal"
+            aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="row">

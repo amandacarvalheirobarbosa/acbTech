@@ -5,10 +5,19 @@ include_once ("../../db/connection.php");
 $TitlePage = "Produtos";
 
 try {
+  $nome = isset($_POST["nome"]) ? mysqli_real_escape_string($conn, $_POST["nome"]) : "";
+
   $sql = "SELECT prod.*, cat.nome as nome_cat
           FROM tab_produto prod
           LEFT JOIN tab_categoria cat ON cat.id_categoria=prod.id_categoria
-          WHERE prod.deleted IS NULL";
+          WHERE prod.deleted IS NULL ";
+
+  if ($nome != null && $nome != "") {
+    $sql .= " AND prod.nome LIKE '%" . $nome . "%' ";
+  }
+
+  $sql .= " ORDER BY prod.id_produto ASC";
+
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -33,7 +42,7 @@ try {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 </head>
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
   $(document).ready(function () {
     $('.form_datetime').datetimepicker({
       format: 'dd/mm/yyyy hh:ii',
@@ -47,15 +56,53 @@ try {
       showMeridian: 1
     });
   });
-</script> -->
+</script>
 
 <body>
   <header>
     <?php include_once ('../components/navBar.php') ?>
   </header>
 
+  <!-- <div class="container-fluid"> -->
   <div class="container">
     <main role="main" class="pb-3">
+
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <div class="card border mb-3">
+            <div class="card-header" style="background-color: #ed233d; color: white; border-radius: 5px 5px 0 0;">
+              <h5 class="mb-0">Filtrar Produtos</h5>
+            </div>
+            <div class="card-body">
+              <form id="filtroForm" method="POST">
+                <div class="mb-3">
+                  <label for="categoria" class="form-label">Categoria:</label>
+                  <select class="form-select" id="categoria" name="categoria" onchange="salvarSelecao(this.value)">
+                    <?php
+                    $sqlcat = "SELECT id_categoria, nome FROM tab_categoria WHERE deleted IS NULL";
+                    $stmtcat = $conn->prepare($sqlcat);
+                    $stmtcat->execute();
+                    $resultcat = $stmtcat->get_result();
+                    echo '<option value="">Todas as Categorias</option>';
+                    while ($rowcat = $resultcat->fetch_assoc()) {
+                      $selected = isset($row['id_categoria']) && $row['id_categoria'] == $rowcat['id_categoria'] ? 'selected' : '';
+                      echo "<option value='{$rowcat['id_categoria']}' $selected>{$rowcat['nome']}</option>";
+                    }
+                    ?>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="nome" class="form-label">Nome Produto:</label>
+                  <input type="text" class="form-control" id="nome" name="nome">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="aplicarFiltro()">Aplicar Filtro</button>
+                <button class="btn btn-danger text-right" onclick="LimparPesquisa();">Limpar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-4">
           <a class="btn" onclick="Adicionar();" style="background-color: #ed233d !important; color: white;"><i
@@ -63,6 +110,7 @@ try {
             Adicionar</a>
         </div>
       </div>
+
       <div class="row">
         <table class="table">
           <thead>
@@ -101,6 +149,7 @@ try {
           </tbody>
         </table>
       </div>
+
     </main>
   </div>
 
